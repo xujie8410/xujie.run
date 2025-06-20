@@ -11,6 +11,10 @@ on:
       - "scripts/**_sync.py"
       - "requirements.txt"
 
+# This is the new permission block that fixes the error
+permissions:
+  contents: write
+
 env:
   RUN_TYPE: strava
   ATHLETE: xujie
