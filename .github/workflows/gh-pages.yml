@@ -9,13 +9,14 @@ on:
 
 jobs:
   build:
+    # This is the new permission block that fixes the error
+    permissions:
+      contents: write
+      
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # fetch all history so that we can get last year's data
-          fetch-depth: 0
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
@@ -39,7 +40,10 @@ jobs:
         run: yarn install
 
       - name: Build site
-        run: yarn build
+        run: PATH_PREFIX=/${{ github.event.repository.name }} yarn build --prefix-paths
+        
+      - name: Copy assets
+        run: cp -r assets/ public/static
 
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v4
